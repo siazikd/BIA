@@ -46,8 +46,8 @@ class Visualizer:
 
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
-        ax.plot_surface(X, Y, Z, cmap='jet', linewidth=0, antialiased=False)
-        ax.scatter(resX, resY, resZ, c='r', marker='o', s=50)
+        ax.plot_surface(X, Y, Z, cmap='jet', linewidth=0, antialiased=False, alpha=0.2 )
+        ax.scatter(resX, resY, resZ, c='r', marker='o', s=50, depthshade=False )
 
         plt.ylabel(self.algorithm.getFunctionName())
         plt.title(self.algorithm.getFunctionName())
@@ -61,5 +61,6 @@ class Visualizer:
             print('%11s:[%.2f, %.2f]: %.3f' % (
                 self.algorithm.getFunctionName(),
                 result['x'], result['y'], result['value'])
+        
             )
         self.__drawPlot()

@@ -21,10 +21,10 @@ class Main:
 
 Main(
     animation=False, 
-    algorithm=alg.BlindSearch(
-            function=fn.Michalewicz, 
-            limits=(0,3.14),
-            iterations=1000
+    algorithm=alg.HillClimbing(
+            function=fn.Griewank, 
+            limits=(-10, 10),
+            iterations=10000
         )
     ).run()
 

@@ -12,3 +12,30 @@ class BlindSearch(core.Algorithm):
             if self.bestResult is None or self.bestResult > result['value']:
                 self.bestResult = result['value']
                 yield result
+
+
+class HillClimbing(core.Algorithm):
+    def __init__(self, function, limits, iterations):
+        super().__init__(function, limits, iterations)
+        
+    def Exec(self):
+        step_size = 0.15  
+        x, y = np.random.uniform(self.limits[0], self.limits[1]), np.random.uniform(self.limits[0], self.limits[1])
+
+        while True:
+            current_value = self.function(core.Point(x, y))
+            neighbors = [(x + step_size, y), (x - step_size, y), (x, y + step_size), (x, y - step_size)]
+
+            best_neighbor = min(neighbors, key=lambda pos: self.function(core.Point(pos[0], pos[1])))
+
+            if self.bestResult is None or self.function(core.Point(best_neighbor[0], best_neighbor[1])) < self.bestResult:
+                self.bestResult = self.function(core.Point(best_neighbor[0], best_neighbor[1]))
+                x, y = best_neighbor
+                result = {
+                    'x': x,
+                    'y': y,
+                    'value': self.bestResult
+                }
+                yield result
+            else:
+                break
