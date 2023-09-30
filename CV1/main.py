@@ -24,7 +24,7 @@ Main(
     algorithm=alg.HillClimbing(
             function=fn.Griewank, 
             limits=(-10, 10),
-            iterations=10000
+            iterations=100
         )
     ).run()
 

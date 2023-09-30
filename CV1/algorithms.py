@@ -19,12 +19,12 @@ class HillClimbing(core.Algorithm):
         super().__init__(function, limits, iterations)
         
     def Exec(self):
-        step_size = 0.15  
+        stepSize = 0.005
         x, y = np.random.uniform(self.limits[0], self.limits[1]), np.random.uniform(self.limits[0], self.limits[1])
 
         while True:
             current_value = self.function(core.Point(x, y))
-            neighbors = [(x + step_size, y), (x - step_size, y), (x, y + step_size), (x, y - step_size)]
+            neighbors = [(x + self.limits[0] / 100, y), (x - self.limits[0] / 100, y), (x, y + self.limits[1] / 100), (x, y - self.limits[1] / 100)]
 
             best_neighbor = min(neighbors, key=lambda pos: self.function(core.Point(pos[0], pos[1])))
 
