@@ -35,32 +35,32 @@ class Visualizer:
     
     def __drawPlot(self):
         N = 100
-        X = np.linspace(self.algorithm.limits[0], self.algorithm.limits[1], N)
+        X = np.linspace(self.algorithm.limits[0], self.algorithm.limits[1], N) 
         Y = np.linspace(self.algorithm.limits[0], self.algorithm.limits[1], N)
-        X, Y = np.meshgrid(X, Y)
-        Z = self.algorithm.function(Point(X, Y))
+        X, Y = np.meshgrid(X, Y) #vytvori matici bodu
+        Z = self.algorithm.function(Point(X, Y)) #vyhodnoti funkci v bodech
 
-        resX = [result['x'] for result in self.results]
-        resY = [result['y'] for result in self.results]
-        resZ = [result['value'] for result in self.results]
+        resX = [result['x'] for result in self.results] #vytvori pole x-ovych souradnic
+        resY = [result['y'] for result in self.results] #vytvori pole y-ovych souradnic
+        resZ = [result['value'] for result in self.results] #vytvori pole hodnot
 
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
-        ax.plot_surface(X, Y, Z, cmap='jet', linewidth=0, antialiased=False, alpha=0.2 )
-        ax.scatter(resX, resY, resZ, c='r', marker='o', s=50, depthshade=False )
+        ax.plot_surface(X, Y, Z, cmap='jet', linewidth=0, antialiased=False, alpha=0.2 ) #vykresli plochu
+        ax.scatter(resX, resY, resZ, c='r', marker='o', s=50, depthshade=False ) #vykresli body
 
-        plt.ylabel(self.algorithm.getFunctionName())
-        plt.title(self.algorithm.getFunctionName())
+        plt.ylabel(self.algorithm.getFunctionName()) #popisky os
+        plt.title(self.algorithm.getFunctionName()) #titulek
         
         plt.show()
 
 
     def Exec(self):
-        for result in self.algorithm.Exec():
-            self.results.append(result)
-            print('%11s:[%.2f, %.2f]: %.3f' % (
-                self.algorithm.getFunctionName(),
+        for result in self.algorithm.Exec(): #pro vsechny vysledky
+            self.results.append(result) #pridej vysledek
+            print('%11s:[%.2f, %.2f]: %.3f' % ( 
+                self.algorithm.getFunctionName(), 
                 result['x'], result['y'], result['value'])
         
             )
-        self.__drawPlot()
+        self.__drawPlot() #vykresli graf
