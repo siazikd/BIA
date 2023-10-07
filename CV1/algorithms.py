@@ -38,3 +38,56 @@ class HillClimbing(core.Algorithm):
                 yield result
             else:
                 break
+            
+            
+class SimulatedAnnealing(core.Algorithm):
+    def __init__(self, function, limits, iterations):
+        super().__init__(function, limits, iterations)
+        
+    def Exec(self):
+        temp = 500
+        lastPos = None
+        lastResult = 0.0
+
+        while True:
+            x = y = 0.0
+            if lastPos is None:
+                x = y = np.random.uniform(self.limits[0], self.limits[1]) # vyber random bodu
+            else:
+                x = lastPos[0] + np.random.uniform(self.limits[0] / 100, self.limits[1] / 100) # vyber random bodu
+                y = lastPos[1] + np.random.uniform(self.limits[0] / 100, self.limits[1] / 100) # vyber random bodu
+            lastResult = value = self.function(core.Point(x, y))
+
+            if self.bestResult is None or value < self.bestResult:
+                self.bestResult = value
+                lastPos = (x, y)
+                result = {
+                    'x': x,
+                    'y': y,
+                    'value': value
+                }
+                yield result
+
+            else:
+                while temp > 0.1:
+                    x = y = np.random.uniform(self.limits[0], self.limits[1])
+                    value = self.function(core.Point(x, y))
+                    delta = value - lastResult
+                    temp = temp * 0.99
+                    if value < lastResult + np.exp(-delta / temp):
+                        lastPos = (x, y)
+                        if value < lastResult:
+                            print('Found better, temp: ' + str(temp))
+                        else:
+                            print('Found worse, temp: ' + str(temp))
+                        result = {
+                            'x': x,
+                            'y': y,
+                            'value': value
+                        }
+                        yield result
+                        break
+
+            if temp <= 0.1:
+                print('Ran out of temperature')
+                break

@@ -8,10 +8,11 @@ import algorithms as alg
 
 
 class Main:
-    def __init__(self, algorithm: core.Algorithm = None, animation: bool = False):
+    def __init__(self, algorithm: core.Algorithm = None, animation: bool = False, heatmap: bool = False):
         self.algorithm = algorithm
         self.animation = animation
-        self.visualizer = core.Visualizer(algorithm=self.algorithm, results=[])
+        self.heapmap = heatmap
+        self.visualizer = core.Visualizer(animation=self.animation, heatmap=self.heapmap, algorithm=self.algorithm, results=[])
 
     def run(self):
         self.visualizer.Exec()
@@ -20,9 +21,10 @@ class Main:
 
 
 Main(
+    heatmap=True,
     animation=False, 
-    algorithm=alg.HillClimbing(
-            function=fn.Griewank, 
+    algorithm=alg.SimulatedAnnealing(
+            function=fn.Ackley, 
             limits=(-10, 10),
             iterations=100
         )

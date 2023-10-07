@@ -15,7 +15,7 @@ def Rastrigin(point: core.Point) -> float:
 def Rosenbrock(point: core.Point) -> float:
     x = point.x
     y = point.y
-    return 100 * (y - x**2)**2 + (1 - x)**2
+    return 100 * (y - x**2)**2 + ( x - 1)**2 
 
 def Griewank(point: core.Point) -> float:
     x = point.x
