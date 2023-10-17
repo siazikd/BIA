@@ -111,7 +111,7 @@ class Visualizer:
                 result['x'], result['y'], result['value'])       
             )
         if self.heatmap:
-            self.__createHeatmap()   
+            self.__createHeatmap()  
         elif self.animation:
             self.__animation() #vykresli animaci
         else:    

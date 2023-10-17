@@ -21,9 +21,9 @@ class Main:
 
 
 Main(
-    heatmap=True,
+    heatmap=False,
     animation=False, 
-    algorithm=alg.SimulatedAnnealing(
+    algorithm=alg.HillClimbing(
             function=fn.Ackley, 
             limits=(-10, 10),
             iterations=100
