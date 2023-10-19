@@ -20,6 +20,7 @@ def fitness(individual):
     return 1/total_distance 
 
 population = [random.sample(range(num_cities), num_cities) for _ in range(pop_size)] # vytvoření populace
+population = [individual + [individual[0]] for individual in population] # přidání prvního města na konec jedince
 
 for generation in range(num_generations):
     fitness_scores = [fitness([city_positions[i] for i in individual]) for individual in population] # vytvoření seznamu fitness hodnot jedinců
@@ -43,8 +44,9 @@ for generation in range(num_generations):
             mutation_point1 = random.randint(0, num_cities-1) # náhodný index města
             mutation_point2 = random.randint(0, num_cities-1) # náhodný index města
             child[mutation_point1], child[mutation_point2] = child[mutation_point2], child[mutation_point1] # prohození měst na indexech mutation_point1 a mutation_point2
+            #print(child)
         
-        # Přidání potomka do nové populace
+        child.append(child[0])
         new_population.append(child)
     
     # Nastavení populace na novou populaci
