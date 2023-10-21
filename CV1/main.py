@@ -21,12 +21,15 @@ class Main:
 
 
 Main(
-    heatmap=False,
-    animation=False, 
-    algorithm=alg.HillClimbing(
+    heatmap=True,
+    #animation=False, 
+    algorithm=alg.DifferentialEvolution(
             function=fn.Ackley, 
             limits=(-10, 10),
-            iterations=100
+            CR=0.5,
+            F=0.5,
+            G=20,
+            NP=20,
         )
-    ).run()
+).run()
 
