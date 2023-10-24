@@ -24,8 +24,8 @@ Main(
     heatmap=True,
     #animation=False, 
     algorithm=alg.DifferentialEvolution(
-            function=fn.Ackley, 
-            limits=(-10, 10),
+            function=fn.Sphere, 
+            limits=(-5.12, 5.12),
             CR=0.5,
             F=0.5,
             G=20,

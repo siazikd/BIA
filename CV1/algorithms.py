@@ -97,10 +97,10 @@ class SimulatedAnnealing(core.Algorithm):
 class DifferentialEvolution(core.Algorithm):
     def __init__(self, function, limits, NP, F, G, CR):
         super().__init__(function, limits, 0)
-        self.NP = NP
-        self.F = F
-        self.G = G
-        self.CR = CR
+        self.NP = NP # počet jedinců v populaci
+        self.F = F # faktor mutace
+        self.G = G  # počet generaci
+        self.CR = CR # pravděpodobnost křížení
         
     def Exec(self):    
         # Inicializace populace
