@@ -21,8 +21,8 @@ class Main:
 
 
 Main(
-    #heatmap=True,
-    animation=True, 
+    heatmap=True,
+    #animation=True, 
     algorithm=alg.ParticleSwarmOptimization(
             function=fn.Sphere, 
             limits=(-5.12, 5.12),

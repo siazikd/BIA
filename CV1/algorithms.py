@@ -168,14 +168,14 @@ class ParticleSwarmOptimization(core.Algorithm):
                 velocities[i].y = w * velocities[i].y + self.c1 * r1 * (personal_bests[i].y - population[i].y) + self.c2 * r2 * (global_best.y - population[i].y)
                 
                 # Omezení rychlosti
-                if velocities[i].x > self.limits[1]:
+                if velocities[i].x > 1:
                     velocities[i].x = 1
-                elif velocities[i].x < self.limits[0]:
+                elif velocities[i].x < -1:
                     velocities[i].x = -1
                     
-                if velocities[i].y > self.limits[1]:
+                if velocities[i].y > 1:
                     velocities[i].y = 1
-                elif velocities[i].y < self.limits[0]:
+                elif velocities[i].y < -1:
                     velocities[i].y = -1
                 
                 # Výpočet nové pozice
