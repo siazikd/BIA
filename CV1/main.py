@@ -16,20 +16,16 @@ class Main:
 
     def run(self):
         self.visualizer.Exec()
-        print('Best result: %.3f' % self.algorithm.bestResult)
+        print('Best result: ', self.algorithm.bestResult)
         pass
 
 
 Main(
-    heatmap=True,
-    #animation=False, 
-    algorithm=alg.DifferentialEvolution(
+    #heatmap=True,
+    animation=True, 
+    algorithm=alg.ParticleSwarmOptimization(
             function=fn.Sphere, 
             limits=(-5.12, 5.12),
-            CR=0.5,
-            F=0.5,
-            G=20,
-            NP=20,
         )
 ).run()
 

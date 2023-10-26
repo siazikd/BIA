@@ -106,10 +106,10 @@ class Visualizer:
     def Exec(self):
         for result in self.algorithm.Exec(): #pro vsechny vysledky
             self.results.append(result) #pridej vysledek
-            print('%11s:[%.2f, %.2f]: %.3f' % ( 
-                self.algorithm.getFunctionName(), 
-                result['x'], result['y'], result['value'])       
-            )
+            #print('%11s:[%.2f, %.2f]: %.3f' % ( 
+            #    self.algorithm.getFunctionName(), 
+            #    result['x'], result['y'], result['value'])       
+            #)
         if self.heatmap:
             self.__createHeatmap()  
         elif self.animation:
