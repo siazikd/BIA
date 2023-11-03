@@ -21,9 +21,9 @@ class Main:
 
 
 Main(
-    heatmap=True,
-    #animation=True, 
-    algorithm=alg.ParticleSwarmOptimization(
+    #heatmap=True,
+    animation=True, 
+    algorithm=alg.SOMA(
             function=fn.Sphere, 
             limits=(-5.12, 5.12),
         )

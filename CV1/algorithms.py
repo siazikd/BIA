@@ -95,7 +95,7 @@ class SimulatedAnnealing(core.Algorithm):
             
             
 class DifferentialEvolution(core.Algorithm):
-    def __init__(self, function, limits, NP, F, G, CR):
+    def __init__(self, function, limits, NP = 20, F = 0.5, G = 20, CR = 0.5):
         super().__init__(function, limits, 0)
         self.NP = NP # počet jedinců v populaci
         self.F = F # faktor mutace
@@ -113,7 +113,7 @@ class DifferentialEvolution(core.Algorithm):
                 indices = np.random.choice(self.NP, size=3, replace=False) # Výběr 3 náhodných jedinců z populace
                 a, b, c = [population[idx] for idx in indices] # Výběr jedinců z populace
                 
-                mutant_vector = core.Point(a.x + self.F * (b.x - c.x), a.y + self.F * (b.y - c.y)) # Mutace pomocí diferenciálního vektoru (rand/bin)
+                mutant_vector = core.Point(a.x + self.F * (b.x - c.x), a.y + self.F * (b.y - c.y)) # Mutace pomocí vektoru (rand/bin)
                 
                 # Křížení 
                 trial_vector = core.Point(mutant_vector.x if np.random.random() < self.CR else population[i].x,
@@ -211,3 +211,35 @@ class ParticleSwarmOptimization(core.Algorithm):
                 yield {'x': global_best.x, 'y': global_best.y, 'value': fitness}
                 
             M += 1
+            
+
+class SOMA(core.Algorithm):
+    def __init__(self, function, limits, population_size = 20, PRT=0.4, pathLen = 3.0, Step = 0.11, M_max=100):
+        super().__init__(function, limits, 0)
+        self.population_size = population_size # počet jedinců v populaci
+        self.M_max = M_max # počet generaci
+        self.PRT = PRT # pravděpodobnost rotace
+        self.pathLen = pathLen
+        self.Step = Step
+        
+    def Exec(self):
+        population = [core.Point(np.random.uniform(self.limits[0], self.limits[1]), np.random.uniform(self.limits[0], self.limits[1])) for _ in range(self.population_size)]
+        best = min(population, key=lambda x: self.function(x))
+        M = 0
+        while M < self.M_max:
+            t = 0.0
+            while t <= self.pathLen:
+                for i in range(self.population_size):
+                    ptrVec = 1 if np.random.uniform() < self.PRT else 0
+                    new = core.Point(x = population[i].x + (best.x - population[i].x) * t * ptrVec, y=population[i].y + (best.y - population[i].y) * t * ptrVec)
+                    
+                    if self.function(new) < self.function(population[i]):
+                        population[i] = new           
+                        best = min(population, key=lambda x: self.function(x))  
+                        yield {'x': population[i].x, 'y': population[i].y, 'value': self.function( population[i])}                        
+                t = t + self.Step 
+            print(f'Best: {best.x}, {best.y}, {self.function(best)}')               
+            M = M + 1
+                            
+
+                    
