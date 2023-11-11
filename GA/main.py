@@ -1,11 +1,11 @@
 import random
 import matplotlib.pyplot as plt
 
-num_cities = 30
+num_cities = 25
 city_positions = [(random.uniform(0, 100), random.uniform(0, 100)) for i in range(num_cities)]
 
 pop_size = 100
-num_generations = 1000
+num_generations = 100
 
 mutation_rate = 0.01
 num_elites = 5
