@@ -101,6 +101,9 @@ class AntColonyOptimization():
 
 # Example usage:
 cities = [(np.random.uniform(0, 10), np.random.uniform(0, 10)) for i in range(35)]
-ant_colony = AntColonyOptimization(cities, n_ants=5, n_best=2, n_iterations=1000, decay=0.1, alpha=1, beta=2)
-ant_colony.run()
+ant_colony = AntColonyOptimization(cities, n_ants=10, n_best=4, n_iterations=1000, decay=0.1, alpha=3, beta=3)
+#ant_colony.run()
 print('Done')
+
+
+

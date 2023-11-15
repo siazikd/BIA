@@ -243,3 +243,35 @@ class SOMA(core.Algorithm):
                             
 
                     
+
+
+class Firefly(core.Algorithm):
+    def __init__(self, function, limits, population_size = 20, alpha=0.3, beta=1, intensity=1.0, M_max=100):
+        super().__init__(function, limits, 0)
+        self.population_size = population_size # počet jedinců v populaci
+        self.M_max = M_max # počet generaci
+        self.alpha = alpha # absorpce světla
+        self.beta = beta # atraktivita
+        self.intensity = intensity # intenzita světla
+        
+    def Exec(self):
+        population = [core.Point(np.random.uniform(self.limits[0], self.limits[1]), np.random.uniform(self.limits[0], self.limits[1])) for _ in range(self.population_size)]
+        best = min(population, key=lambda x: self.function(x))
+        generation = 0
+        while generation < self.M_max:
+            for i in range(self.population_size):
+                for j in range(self.population_size):
+                    if self.function(population[i]) > self.function(population[j]): # pokud je jasnejsi
+                        r = np.sqrt((population[i].x - population[j].x) ** 2 + (population[i].y - population[j].y) ** 2) # vzdalenost
+                        beta = self.beta / (1 + r) # atraktivita
+                        gauss = np.random.normal(0, 1) # gaussova distribuce 
+                        population[i].x = population[i].x + (population[j].x - population[i].x) * beta + self.alpha * gauss # novy bod
+                        population[i].y = population[i].y + (population[j].y - population[i].y) * beta + self.alpha * gauss # novy bod
+                        if self.function(population[i]) < self.function(best): # pokud je lepsi nez nejlepsi
+                            best = population[i] 
+                            print(f'Best: {best.x}, {best.y}, {self.function(best)}')
+                            yield {'x': best.x, 'y': best.y, 'value': self.function(best)}                  
+                    
+                    
+            generation = generation + 1
+                            

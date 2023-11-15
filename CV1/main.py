@@ -23,7 +23,7 @@ class Main:
 Main(
     #heatmap=True,
     animation=True, 
-    algorithm=alg.SOMA(
+    algorithm=alg.Firefly(
             function=fn.Sphere, 
             limits=(-5.12, 5.12),
         )
