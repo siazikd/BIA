@@ -214,7 +214,7 @@ class ParticleSwarmOptimization(core.Algorithm):
             
 
 class SOMA(core.Algorithm):
-    def __init__(self, function, limits, population_size = 20, PRT=0.4, pathLen = 3.0, Step = 0.11, M_max=100):
+    def __init__(self, function, limits, population_size = 5, PRT=0.4, pathLen = 3.0, Step = 0.11, M_max=100):
         super().__init__(function, limits, 0)
         self.population_size = population_size # počet jedinců v populaci
         self.M_max = M_max # počet generaci
@@ -246,7 +246,7 @@ class SOMA(core.Algorithm):
 
 
 class Firefly(core.Algorithm):
-    def __init__(self, function, limits, population_size = 20, alpha=0.3, beta=1, intensity=1.0, M_max=100):
+    def __init__(self, function, limits, population_size = 5, alpha=0.3, beta=1, intensity=1.0, M_max=100):
         super().__init__(function, limits, 0)
         self.population_size = population_size # počet jedinců v populaci
         self.M_max = M_max # počet generaci

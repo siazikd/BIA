@@ -16,7 +16,7 @@ class AntColonyOptimization():
         self.fig, self.ax = plt.subplots() 
         self.lines = []
 
-    def create_matrix_distances(self): # matice vzdáleností mezi městy
+    def create_matrix_distances(self): # matice vzdáleností mezi městy pomocí euclidovské vzdálenosti
         matrix = np.zeros((len(self.cities), len(self.cities))) 
         for i in range(len(self.cities)):
             for j in range(len(self.cities)):
@@ -46,19 +46,19 @@ class AntColonyOptimization():
 
         plt.show()
 
-    def spread_pheromone(self, all_paths, n_best, shortest_path):
+    def spread_pheromone(self, all_paths, n_best, shortest_path): # Rozšíření feromonů
         sorted_paths = sorted(all_paths, key=lambda x: x[1]) # Seřazení cest podle délky
         for path, dist in sorted_paths[:n_best]: # Pro nejlepší cesty
             for move in path: # Pro každý krok
                 self.pheromone[move] += 1.0 / self.distances[move] # Přidání feromonů
 
-    def gen_path_dist(self, path):
+    def gen_path_dist(self, path): # Výpočet vzdálenosti cesty
         total_dist = 0 # Celková vzdálenost
         for ele in path:  
             total_dist += self.distances[ele]
         return total_dist
 
-    def gen_all_paths(self):
+    def gen_all_paths(self):# Výpočet všech cest
         all_paths = [] # Všechny cesty
         for i in range(self.n_ants): 
             path = self.gen_path(i) # Cesta mravence
@@ -100,9 +100,9 @@ class AntColonyOptimization():
 
 
 # Example usage:
-cities = [(np.random.uniform(0, 10), np.random.uniform(0, 10)) for i in range(35)]
-ant_colony = AntColonyOptimization(cities, n_ants=10, n_best=4, n_iterations=1000, decay=0.1, alpha=3, beta=3)
-#ant_colony.run()
+cities = [(np.random.uniform(0, 10), np.random.uniform(0, 10)) for i in range(20)]
+ant_colony = AntColonyOptimization(cities, n_ants=10, n_best=4, n_iterations=500, decay=0.1, alpha=1, beta=1)
+ant_colony.run()
 print('Done')
 
 

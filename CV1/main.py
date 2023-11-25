@@ -24,8 +24,8 @@ Main(
     #heatmap=True,
     animation=True, 
     algorithm=alg.Firefly(
-            function=fn.Sphere, 
-            limits=(-5.12, 5.12),
+            function=fn.Zakharov, 
+            limits=(-10, 5),
         )
 ).run()
 
