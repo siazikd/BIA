@@ -1,6 +1,6 @@
 import numpy as np
 import core as core
-
+import random
 class BlindSearch(core.Algorithm):
     def __init__(self, function, limits, iterations):
         super().__init__(function, limits, iterations)
@@ -76,10 +76,7 @@ class SimulatedAnnealing(core.Algorithm):
                     temp = temp * 0.99
                     if value < lastResult + np.exp(-delta / temp):
                         lastPos = (x, y)
-                        if value < lastResult:
-                            print('Found better, temp: ' + str(temp))
-                        else:
-                            print('Found worse, temp: ' + str(temp))
+                        
                         result = {
                             'x': x,
                             'y': y,
@@ -103,7 +100,8 @@ class DifferentialEvolution(core.Algorithm):
         self.CR = CR # pravděpodobnost křížení
         
     def Exec(self):    
-        # Inicializace populace
+        self.random_seed = random.randint(0, 1000)  # Nové náhodné semínko při každém spuštění
+        np.random.seed(self.random_seed)  
         population = [core.Point(np.random.uniform(self.limits[0], self.limits[1]), np.random.uniform(self.limits[0], self.limits[1])) for _ in range(self.NP)]
                 
         for generation in range(self.G):
@@ -123,9 +121,31 @@ class DifferentialEvolution(core.Algorithm):
                 trial_cost = self.function(trial_vector) # Hodnocení nového jedince
                 
                 if trial_cost < original_cost: # Pokud je nový jedinec lepší, nahraď původní jedinec novým
+                    # check boundaries
+                    if trial_vector.x < self.limits[0]:
+                        trial_vector.x = self.limits[0]
+                    elif trial_vector.x > self.limits[1]:
+                        trial_vector.x = self.limits[1]
+                        
+                    if trial_vector.y < self.limits[0]:
+                        trial_vector.y = self.limits[0]
+                    elif trial_vector.y > self.limits[1]:
+                        trial_vector.y = self.limits[1]
+                
                     yield {'x': trial_vector.x, 'y': trial_vector.y, 'value': trial_cost}
                     new_population.append(trial_vector)
                 else:
+                    # check boundaries
+                    if population[i].x < self.limits[0]:
+                        population[i].x = self.limits[0]
+                    elif population[i].x > self.limits[1]:
+                        population[i].x = self.limits[1]
+                        
+                    if population[i].y < self.limits[0]:
+                        population[i].y = self.limits[0]
+                    elif population[i].y > self.limits[1]:
+                        population[i].y = self.limits[1]
+                        
                     yield {'x': population[i].x, 'y': population[i].y, 'value': original_cost}
                     new_population.append(population[i]) # Pokud je původní jedinec lepší, ponech ho v populaci
             
@@ -133,7 +153,7 @@ class DifferentialEvolution(core.Algorithm):
         
         best_individual = min(population, key=lambda x: self.function(x)) # Výběr nejlepšího jedince
         best_cost = self.function(best_individual) # Hodnocení nejlepšího jedince
-        print(f"Nejlepší řešení x: {best_individual.x}, y: {best_individual.y} s hodnotou {best_cost}") 
+        #print(f"Nejlepší řešení x: {best_individual.x}, y: {best_individual.y} s hodnotou {best_cost}") 
         yield {'x': best_individual.x, 'y': best_individual.y, 'value': best_cost} 
 
 
@@ -150,7 +170,8 @@ class ParticleSwarmOptimization(core.Algorithm):
         self.w_max = w_max # setrvačnost
         
     def Exec(self):
-        # Inicializace populace
+        self.random_seed = random.randint(0, 1000)  # Nové náhodné semínko při každém spuštění
+        np.random.seed(self.random_seed)  
         population = [core.Point(np.random.uniform(self.limits[0], self.limits[1]), np.random.uniform(self.limits[0], self.limits[1])) for _ in range(self.population_size)]
         velocities = [core.Point(np.random.uniform(-1, 1), np.random.uniform(0, 1)) for _ in range(self.population_size)] # Inicializace rychlostí
         personal_bests = population.copy()  # Inicializace osobních nejlepších řešení
@@ -222,10 +243,14 @@ class SOMA(core.Algorithm):
         self.pathLen = pathLen
         self.Step = Step
         
+
     def Exec(self):
+        self.random_seed = random.randint(0, 1000)  # Nové náhodné semínko při každém spuštění
+        np.random.seed(self.random_seed)  
         population = [core.Point(np.random.uniform(self.limits[0], self.limits[1]), np.random.uniform(self.limits[0], self.limits[1])) for _ in range(self.population_size)]
         best = min(population, key=lambda x: self.function(x))
         M = 0
+        Max_OFE = 0
         while M < self.M_max:
             t = 0.0
             while t <= self.pathLen:
@@ -233,12 +258,28 @@ class SOMA(core.Algorithm):
                     ptrVec = 1 if np.random.uniform() < self.PRT else 0
                     new = core.Point(x = population[i].x + (best.x - population[i].x) * t * ptrVec, y=population[i].y + (best.y - population[i].y) * t * ptrVec)
                     
+                    # check boundaries
+                    if new.x < self.limits[0]:
+                        new.x = self.limits[0]
+                    elif new.x > self.limits[1]:
+                        new.x = self.limits[1]
+                        
+                    if new.y < self.limits[0]:
+                        new.y = self.limits[0]
+                    elif new.y > self.limits[1]:
+                        new.y = self.limits[1]
+                        
                     if self.function(new) < self.function(population[i]):
                         population[i] = new           
-                        best = min(population, key=lambda x: self.function(x))  
-                        yield {'x': population[i].x, 'y': population[i].y, 'value': self.function( population[i])}                        
+                        best = min(population, key=lambda x: self.function(x))
+                        #print(f'Best: {best.x}, {best.y}, {self.function(best)}')  
+                        yield {'x': population[i].x, 'y': population[i].y, 'value': self.function(population[i])}  
+                    Max_OFE = Max_OFE + 1
+                    if Max_OFE >= 1300:
+                        M = self.M_max
+                        t = self.pathLen                      
                 t = t + self.Step 
-            print(f'Best: {best.x}, {best.y}, {self.function(best)}')               
+            #print(f'Best: {best.x}, {best.y}, {self.function(best)}')               
             M = M + 1
                             
 
@@ -253,8 +294,10 @@ class Firefly(core.Algorithm):
         self.alpha = alpha # absorpce světla
         self.beta = beta # atraktivita
         self.intensity = intensity # intenzita světla
-        
+
     def Exec(self):
+        self.random_seed = random.randint(0, 1000)  # Nové náhodné semínko při každém spuštění
+        np.random.seed(self.random_seed)  
         population = [core.Point(np.random.uniform(self.limits[0], self.limits[1]), np.random.uniform(self.limits[0], self.limits[1])) for _ in range(self.population_size)]
         best = min(population, key=lambda x: self.function(x))
         generation = 0
@@ -267,11 +310,98 @@ class Firefly(core.Algorithm):
                         gauss = np.random.normal(0, 1) # gaussova distribuce 
                         population[i].x = population[i].x + (population[j].x - population[i].x) * beta + self.alpha * gauss # novy bod
                         population[i].y = population[i].y + (population[j].y - population[i].y) * beta + self.alpha * gauss # novy bod
+                        # check boundaries
+                        if population[i].x < self.limits[0]:
+                            population[i].x = self.limits[0]
+                        elif population[i].x > self.limits[1]:
+                            population[i].x = self.limits[1]
+                            
+                        if population[i].y < self.limits[0]:
+                            population[i].y = self.limits[0]
+                        elif population[i].y > self.limits[1]:
+                            population[i].y = self.limits[1]
+                            
                         if self.function(population[i]) < self.function(best): # pokud je lepsi nez nejlepsi
                             best = population[i] 
-                            print(f'Best: {best.x}, {best.y}, {self.function(best)}')
+                            #print(f'Best: {best.x}, {best.y}, {self.function(best)}')
                             yield {'x': best.x, 'y': best.y, 'value': self.function(best)}                  
                     
                     
             generation = generation + 1
                             
+                            
+                            
+class TeachingLearning(core.Algorithm):
+    def __init__(self, function, limits, population_size=5, M_max=100):
+        super().__init__(function, limits, 0)
+        self.population_size = population_size
+        self.M_max = M_max
+
+    def Exec(self):
+        self.random_seed = random.randint(0, 1000)  # Nové náhodné semínko při každém spuštění
+        np.random.seed(self.random_seed)  
+        population = [core.Point(np.random.uniform(self.limits[0], self.limits[1]), np.random.uniform(self.limits[0], self.limits[1])) for _ in range(self.population_size)]
+        best = min(population, key=lambda x: self.function(x)) 
+        generation = 0
+        while generation < self.M_max:
+            mean_teacher = self.teacher_phase(population)
+            new_population = self.student_phase(population, mean_teacher)
+            population = new_population
+            
+            best = min(population, key=lambda x: self.function(x))
+            #print(f'Best: {best.x}, {best.y}, {self.function(best)}')
+            yield {'x': best.x, 'y': best.y, 'value': self.function(best)}
+            generation += 1
+
+    def teacher_phase(self, population):
+        mean_x = sum(individual.x for individual in population) / len(population)
+        mean_y = sum(individual.y for individual in population) / len(population)
+        mean_population = core.Point(mean_x, mean_y)
+        
+        teacher = min(population, key=lambda x: self.function(x))
+        
+        r = np.random.randint(1, 3)
+        diff_x = r * (teacher.x - mean_population.x)
+        diff_y = r * (teacher.y - mean_population.y)
+        new_teacher = core.Point(teacher.x + diff_x, teacher.y + diff_y)
+        # check boundaries
+        if new_teacher.x < self.limits[0]:
+            new_teacher.x = self.limits[0]
+        elif new_teacher.x > self.limits[1]:
+            new_teacher.x = self.limits[1]
+            
+        if new_teacher.y < self.limits[0]:
+            new_teacher.y = self.limits[0]
+        elif new_teacher.y > self.limits[1]:
+            new_teacher.y = self.limits[1]
+        
+        if self.function(new_teacher) < self.function(teacher):
+            teacher = new_teacher
+            
+        return teacher
+
+    def student_phase(self, population, teacher):
+        new_population = []
+        for individual in population:
+            random_student = np.random.choice(population)
+            new_individual = None
+            if self.function(individual) < self.function(random_student):
+                new_individual = core.Point(individual.x + np.random.uniform() * (teacher.x - individual.x), individual.y + np.random.uniform() * (teacher.y - individual.y))
+            else:
+                new_individual = core.Point(individual.x + np.random.uniform() * (individual.x - teacher.x), individual.y + np.random.uniform() * (individual.y - teacher.y))            
+            if self.function(new_individual) < self.function(individual):
+                individual = new_individual
+            
+            # check boundaries
+            if individual.x < self.limits[0]:
+                individual.x = self.limits[0]
+            elif individual.x > self.limits[1]:
+                individual.x = self.limits[1]
+                
+            if individual.y < self.limits[0]:
+                individual.y = self.limits[0]
+            elif individual.y > self.limits[1]:
+                individual.y = self.limits[1]
+            
+            new_population.append(individual)
+        return new_population

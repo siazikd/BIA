@@ -22,6 +22,9 @@ class Algorithm:
         else:
             return "N/A"
         
+    def getClassName(self):
+        return self.__class__.__name__
+        
 class Point:
     def __init__(self, x, y):
         self.x = x
@@ -110,9 +113,11 @@ class Visualizer:
             #    self.algorithm.getFunctionName(), 
             #    result['x'], result['y'], result['value'])       
             #)
+            if self.algorithm.bestResult == None or result['value'] < self.algorithm.bestResult['value']:
+                self.algorithm.bestResult = result #uloz nejlepsi vysledek
         if self.heatmap:
             self.__createHeatmap()  
         elif self.animation:
             self.__animation() #vykresli animaci
-        else:    
-            self.__drawPlot() #vykresli graf
+        #else:    
+            #self.__drawPlot() #vykresli graf
