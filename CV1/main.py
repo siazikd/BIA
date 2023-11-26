@@ -20,7 +20,6 @@ class Main:
         #print('Best result: ', self.algorithm.bestResult)
         return self.algorithm.bestResult['value']
         
-"""
 algs = [
     Main(
     algorithm=alg.TeachingLearning(
@@ -95,12 +94,15 @@ for i in range(len(functions)):
     fn = functions[i]
     lm = limits[i]
     results = {}
+    #print(f'Function: {name}')
+    #print(f'Limits: {lm[0]} - {lm[1]}')
     for alg in algs:
         alg.algorithm.function = fn
         alg.algorithm.limits = lm
         results[alg.algorithm.getClassName()] = {}
         for i in range(1, 31):  # Pro experimenty 1 až 30
             results[alg.algorithm.getClassName()][f'Exp {i}'] = (alg.run()) 
+            
 
     summary = {}
     for algorithm in results.keys():
@@ -129,3 +131,4 @@ Main(
         M_max=30,
     )
 ).run()
+"""

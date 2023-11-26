@@ -100,8 +100,7 @@ class DifferentialEvolution(core.Algorithm):
         self.CR = CR # pravděpodobnost křížení
         
     def Exec(self):    
-        self.random_seed = random.randint(0, 1000)  # Nové náhodné semínko při každém spuštění
-        np.random.seed(self.random_seed)  
+        np.random.seed() 
         population = [core.Point(np.random.uniform(self.limits[0], self.limits[1]), np.random.uniform(self.limits[0], self.limits[1])) for _ in range(self.NP)]
                 
         for generation in range(self.G):
@@ -170,8 +169,8 @@ class ParticleSwarmOptimization(core.Algorithm):
         self.w_max = w_max # setrvačnost
         
     def Exec(self):
-        self.random_seed = random.randint(0, 1000)  # Nové náhodné semínko při každém spuštění
-        np.random.seed(self.random_seed)  
+        np.random.seed() 
+ 
         population = [core.Point(np.random.uniform(self.limits[0], self.limits[1]), np.random.uniform(self.limits[0], self.limits[1])) for _ in range(self.population_size)]
         velocities = [core.Point(np.random.uniform(-1, 1), np.random.uniform(0, 1)) for _ in range(self.population_size)] # Inicializace rychlostí
         personal_bests = population.copy()  # Inicializace osobních nejlepších řešení
@@ -245,8 +244,7 @@ class SOMA(core.Algorithm):
         
 
     def Exec(self):
-        self.random_seed = random.randint(0, 1000)  # Nové náhodné semínko při každém spuštění
-        np.random.seed(self.random_seed)  
+        np.random.seed()  
         population = [core.Point(np.random.uniform(self.limits[0], self.limits[1]), np.random.uniform(self.limits[0], self.limits[1])) for _ in range(self.population_size)]
         best = min(population, key=lambda x: self.function(x))
         M = 0
@@ -296,8 +294,7 @@ class Firefly(core.Algorithm):
         self.intensity = intensity # intenzita světla
 
     def Exec(self):
-        self.random_seed = random.randint(0, 1000)  # Nové náhodné semínko při každém spuštění
-        np.random.seed(self.random_seed)  
+        np.random.seed() 
         population = [core.Point(np.random.uniform(self.limits[0], self.limits[1]), np.random.uniform(self.limits[0], self.limits[1])) for _ in range(self.population_size)]
         best = min(population, key=lambda x: self.function(x))
         generation = 0
@@ -338,8 +335,7 @@ class TeachingLearning(core.Algorithm):
         self.M_max = M_max
 
     def Exec(self):
-        self.random_seed = random.randint(0, 1000)  # Nové náhodné semínko při každém spuštění
-        np.random.seed(self.random_seed)  
+        np.random.seed() 
         population = [core.Point(np.random.uniform(self.limits[0], self.limits[1]), np.random.uniform(self.limits[0], self.limits[1])) for _ in range(self.population_size)]
         best = min(population, key=lambda x: self.function(x)) 
         generation = 0
@@ -402,6 +398,5 @@ class TeachingLearning(core.Algorithm):
                 individual.y = self.limits[0]
             elif individual.y > self.limits[1]:
                 individual.y = self.limits[1]
-            
             new_population.append(individual)
         return new_population
